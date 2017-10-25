@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/test/battleship/CoordinatesTest.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/Coordinates.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/test/battleship/ShipTest.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/Cell.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/test/battleship/CellTest.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/Player.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/Game.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/GameBoard.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/Ship.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/src/battleship/TestAverageRounds.java</file>
-            <file>file:/C:/Users/Dmitriy.Morozov.ECOMUA.005/Desktop/BattleShip/test/battleship/GameBoardTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/GameBoardTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/CellTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/src/battleship/Cell.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/ShipTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/CoordinatesTest.java</file>
         </group>
     </open-files>
 </project-private>

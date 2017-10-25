@@ -2,14 +2,10 @@ package battleship;
 
 import static battleship.Cell.*;
 import java.lang.reflect.Field;
-import java.util.concurrent.ThreadLocalRandom;
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import org.mockito.*;
 
 public class CellTest {
     
@@ -49,30 +45,6 @@ public class CellTest {
         boolean result = !instance.isShot() && !instance.isShip();
         assertEquals(expResult, result);
     }
-
-    @Test
-    public void testFireFreeCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        System.out.println("fireFreeCell");
-        Cell instance = new Cell();
-        
-        //Reflection to edit fields
-        Field field = instance.getClass().getDeclaredField("mIsShip");
-        field.setAccessible(true);
-        field.set(instance, true);
-        System.out.println("isShip = " + instance.isShot());
-                
-        boolean expResult = false;
-        boolean expIsShot = true;
-        boolean expIsShip = true;
-            
-        boolean result = instance.fire();
-        boolean isShot = instance.isShot();
-        boolean isShip = instance.isShip();
-
-        assertEquals(expResult, result);
-        assertEquals(expIsShot, isShot);
-        assertEquals(expIsShip, isShip);
-    }
     
     /**
      * Test of setAdjoined method, of class Cell.
@@ -85,5 +57,113 @@ public class CellTest {
         boolean expResult = true;
         boolean result = !instance.isShip() && instance.isShot();
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testFireNotShotFreeCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        System.out.println("fireFreeCell");
+        Cell instance = new Cell();
+        
+        //TODO DON"T USE THAT!
+        //Reflection to edit fields
+        Field field1 = instance.getClass().getDeclaredField("mIsShip");
+        field1.setAccessible(true);
+        field1.set(instance, false);
+        Field field2 = instance.getClass().getDeclaredField("mIsShot");
+        field2.setAccessible(true);
+        field2.set(instance, false);
+        
+        boolean expResult = false;
+        boolean expIsShot = true;
+        boolean expIsShip = false;
+            
+        boolean result = instance.fire();
+        boolean isShot = instance.isShot();
+        boolean isShip = instance.isShip();
+
+        assertEquals(expResult, result);
+        assertEquals(expIsShot, isShot);
+        assertEquals(expIsShip, isShip);
+    }
+    
+    @Test
+    public void testFireNotShotOccupiedCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        System.out.println("fireFreeCell");
+        Cell instance = new Cell();
+        
+        //TODO DON"T USE THAT!
+        //Reflection to edit fields
+        Field field1 = instance.getClass().getDeclaredField("mIsShip");
+        field1.setAccessible(true);
+        field1.set(instance, true);
+        Field field2 = instance.getClass().getDeclaredField("mIsShot");
+        field2.setAccessible(true);
+        field2.set(instance, false);
+        
+        boolean expResult = true;
+        boolean expIsShot = true;
+        boolean expIsShip = true;
+            
+        boolean result = instance.fire();
+        boolean isShot = instance.isShot();
+        boolean isShip = instance.isShip();
+
+        assertEquals(expResult, result);
+        assertEquals(expIsShot, isShot);
+        assertEquals(expIsShip, isShip);
+    }
+    
+    @Test
+    public void testFireShotFreeCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        System.out.println("fireFreeCell");
+        Cell instance = new Cell();
+        
+        //TODO DON"T USE THAT!
+        //Reflection to edit fields
+        Field field1 = instance.getClass().getDeclaredField("mIsShip");
+        field1.setAccessible(true);
+        field1.set(instance, false);
+        Field field2 = instance.getClass().getDeclaredField("mIsShot");
+        field2.setAccessible(true);
+        field2.set(instance, true);
+        
+        boolean expResult = true;
+        boolean expIsShot = true;
+        boolean expIsShip = false;
+            
+        boolean result = instance.fire();
+        boolean isShot = instance.isShot();
+        boolean isShip = instance.isShip();
+
+        assertEquals(expResult, result);
+        assertEquals(expIsShot, isShot);
+        assertEquals(expIsShip, isShip);
+    }
+    
+    @Test
+    public void testFireShotOccupiedCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        System.out.println("fireFreeCell");
+        Cell instance = new Cell();
+        
+        //TODO DON"T USE THAT!
+        //Reflection to edit fields
+        Field field1 = instance.getClass().getDeclaredField("mIsShip");
+        field1.setAccessible(true);
+        field1.set(instance, true);
+        Field field2 = instance.getClass().getDeclaredField("mIsShot");
+        field2.setAccessible(true);
+        field2.set(instance, true);
+        
+        boolean expResult = true;
+        boolean expIsShot = true;
+        boolean expIsShip = true;
+            
+        boolean result = instance.fire();
+        boolean isShot = instance.isShot();
+        boolean isShip = instance.isShip();
+
+        assertEquals(expResult, result);
+        assertEquals(expIsShot, isShot);
+        assertEquals(expIsShip, isShip);
     }
 }
