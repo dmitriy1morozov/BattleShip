@@ -6,8 +6,8 @@ public class Game {
     public static void main(String[] args) {
         Player player1 = new Player("Player1");
         Player player2 = new Player("Player2");
-        player1.playRandomMap();
-        player2.playRandomMap();
+        player1.generateRandomMap();
+        player2.generateRandomMap();
         
         System.out.println("------------------Player1------------------");
         player1.printGameBoard();
@@ -25,12 +25,7 @@ public class Game {
         //Shooting
         boolean anotherTry;
         do{
-            Coordinates possibleDeck = player.searchPossibleDeck();
-            if(possibleDeck != null){
-                anotherTry = player.fireCell(possibleDeck.getX(), possibleDeck.getY());
-            } else{
-                anotherTry = player.fireRandomCell();
-            }
+            anotherTry = player.fireRandomCell();
             
             System.out.println("------------------" + player.getName() + "------------------");
             player.printGameBoard();

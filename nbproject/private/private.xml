@@ -5,9 +5,13 @@
         <group>
             <file>file:/home/borsh/Desktop/BattleShip/test/battleship/GameBoardTest.java</file>
             <file>file:/home/borsh/Desktop/BattleShip/test/battleship/CellTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/src/battleship/GameBoard.java</file>
             <file>file:/home/borsh/Desktop/BattleShip/src/battleship/Cell.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/PlayerTest.java</file>
             <file>file:/home/borsh/Desktop/BattleShip/test/battleship/ShipTest.java</file>
-            <file>file:/home/borsh/Desktop/BattleShip/test/battleship/CoordinatesTest.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/src/battleship/Ship.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/src/battleship/Player.java</file>
+            <file>file:/home/borsh/Desktop/BattleShip/src/battleship/Coordinates.java</file>
         </group>
     </open-files>
 </project-private>

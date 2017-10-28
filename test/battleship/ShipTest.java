@@ -1,23 +1,19 @@
 package battleship;
 
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ShipTest {
     
-    private final int mDeckNumber = 3;
-    private final Ship mInstance;
+    private final int mDeckNumber;
     
     public ShipTest() {
-        Coordinates[] coordinates = new Coordinates[mDeckNumber];
-        Cell[] cell = new Cell[mDeckNumber];
-        for (int i = 0; i < mDeckNumber; i++) {
-            coordinates[i] = new Coordinates(2+i, 3);
-            cell[i] = new Cell();
-        }
-        mInstance = new Ship(coordinates, cell);
+        mDeckNumber = ThreadLocalRandom.current().nextInt(1, 5);
     }
     
     @BeforeClass
@@ -29,75 +25,92 @@ public class ShipTest {
     }
 
     /**
-     * Test of getDeckCells method, of class Ship.
-     */
-    @Test
-    public void testGetDeckCells() {
-        System.out.println("getDeckCells");
-        
-        Cell[] expResult = new Cell[mDeckNumber];
-        for (int i = 0; i < mDeckNumber; i++) {
-            expResult[i] = new Cell();
-        }
-        
-        Cell[] result = mInstance.getDeckCells();
-        for (int i = 0; i < result.length; i++) {
-            assertEquals(expResult[i].isShip(),result[i].isShip());
-            assertEquals(expResult[i].isShot(),result[i].isShot());
-        }
-    }
-
-    /**
-     * Test of getCoordinates method, of class Ship.
-     */
-    @Test
-    public void testGetCoordinates() {
-        System.out.println("getCoordinates");
-        
-        Coordinates[] expResult = new Coordinates[mDeckNumber];
-        for (int i = 0; i < mDeckNumber; i++) {
-            expResult[i] = new Coordinates(2+i, 3);
-        }
-        
-        Coordinates[] result = mInstance.getCoordinates();
-        for (int i = 0; i < result.length; i++) {
-            assertTrue(expResult[i].equals(result[i]));
-        }
-    }
-
-    /**
-     * Test of isHorizontal method, of class Ship.
-     */
-    @Test
-    public void testIsHorizontal() {
-        System.out.println("isHorizontal");
-        
-        boolean expResult = true;
-        boolean result = mInstance.isHorizontal();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of isDrown method, of class Ship.
      */
     @Test
-    public void testIsDrown() {
-        System.out.println("isDrown");
+    public void testIsDrown_true() {
+        System.out.println("testDrown");
         
-        boolean expResult = false;
-        boolean result = mInstance.isDrown();
-        assertEquals(expResult, result);
+        Coordinates[] coordinates = new Coordinates[mDeckNumber];
+        Cell[] cell = new Cell[mDeckNumber];
+        Cell mockDeckInjured = mock(Cell.class);
+        when(mockDeckInjured.isShot()).thenReturn(true);
+        when(mockDeckInjured.isShip()).thenReturn(true);
+        for (int i = 0; i < mDeckNumber; i++) {
+            coordinates[i] = new Coordinates(2+i, 3);
+            cell[i] = mockDeckInjured;
+        }
+        Ship instance = new Ship(coordinates, cell);
+        assertTrue(instance.isDrown());
+    }
+    
+    @Test
+    public void testIsDrown_false() {
+        System.out.println("testNotDrown");
+        
+        Coordinates[] coordinates = new Coordinates[mDeckNumber];
+        Cell[] cell = new Cell[mDeckNumber];
+        Cell mockDeckInjured = mock(Cell.class);
+        when(mockDeckInjured.isShot()).thenReturn(true);
+        when(mockDeckInjured.isShip()).thenReturn(true);
+        Cell mockDeckNotInjured = mock(Cell.class);
+        when(mockDeckNotInjured.isShot()).thenReturn(false);
+        when(mockDeckNotInjured.isShip()).thenReturn(true);
+        for (int i = 0; i < mDeckNumber; i++) {
+            coordinates[i] = new Coordinates(2+i, 3);
+            cell[i] = mockDeckInjured;
+        }
+        if(mDeckNumber == 1){
+            cell[0] = mockDeckNotInjured;
+        } else{
+            cell[ThreadLocalRandom.current().nextInt(0, mDeckNumber)] = mockDeckNotInjured;
+        }
+        Ship instance = new Ship(coordinates, cell);
+        assertFalse(instance.isDrown());
     }
 
     /**
      * Test of isInjured method, of class Ship.
      */
     @Test
-    public void testIsInjured() {
-        System.out.println("isInjured");
+    public void testIsInjured_true() {
+        System.out.println("testInjured");
         
-        boolean expResult = false;
-        boolean result = mInstance.isInjured();
-        assertEquals(expResult, result);
+        int deckNumber = ThreadLocalRandom.current().nextInt(2, 5);
+        Coordinates[] coordinates = new Coordinates[deckNumber];
+        Cell[] cell = new Cell[deckNumber];
+        Cell mockDeckInjured = mock(Cell.class);
+        when(mockDeckInjured.isShot()).thenReturn(true);
+        when(mockDeckInjured.isShip()).thenReturn(true);
+        Cell mockDeckNotInjured = mock(Cell.class);
+        when(mockDeckNotInjured.isShot()).thenReturn(false);
+        when(mockDeckNotInjured.isShip()).thenReturn(true);
+        for (int i = 0; i < deckNumber; i++) {
+            coordinates[i] = new Coordinates(2+i, 3);
+            cell[i] = mockDeckNotInjured;
+        }
+        cell[ThreadLocalRandom.current().nextInt(0, deckNumber)] = mockDeckInjured;
+        Ship instance = new Ship(coordinates, cell);
+        assertTrue(instance.isInjured());
+    }
+    
+    /**
+     * Test of isInjured method, of class Ship.
+     */
+    @Test
+    public void testIsInjured_false() {
+        System.out.println("testNotInjured");
+        
+        Coordinates[] coordinates = new Coordinates[mDeckNumber];
+        Cell[] cell = new Cell[mDeckNumber];
+        Cell mockDeckNotInjured = mock(Cell.class);
+        when(mockDeckNotInjured.isShot()).thenReturn(false);
+        when(mockDeckNotInjured.isShip()).thenReturn(true);
+        for (int i = 0; i < mDeckNumber; i++) {
+            coordinates[i] = new Coordinates(2+i, 3);
+            cell[i] = mockDeckNotInjured;
+        }
+        Ship instance = new Ship(coordinates, cell);
+        assertFalse(instance.isInjured());
     }
 }

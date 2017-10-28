@@ -17,10 +17,7 @@ public class Ship {
             mIsHorizontal = false;
         }
     }
-    
-//    public Ship(Cell[] cells) {
-//        this.mDeck = cells;
-//    }
+
     //===============================Getters====================================
     public Cell[] getDeckCells() {
         return mDeck;

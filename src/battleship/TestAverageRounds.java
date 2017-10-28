@@ -3,7 +3,6 @@ package battleship;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
 public class TestAverageRounds {
     public static void main(String[] args) {
         LinkedList<Integer> movesStats = new LinkedList<>();
@@ -25,8 +24,8 @@ public class TestAverageRounds {
     private static int singleGame(){
         Player player1 = new Player("Player1");
         Player player2 = new Player("Player2");
-        player1.playRandomMap();
-        player2.playRandomMap();
+        player1.generateRandomMap();
+        player2.generateRandomMap();
         
         int moves = 0;
         while(attackPlayer(player1) && attackPlayer(player2)){
@@ -43,12 +42,7 @@ public class TestAverageRounds {
         //Shooting
         boolean anotherTry;
         do{
-            Coordinates possibleDeck = player.searchPossibleDeck();
-            if(possibleDeck != null){
-                anotherTry = player.fireCell(possibleDeck.getX(), possibleDeck.getY());
-            } else{
-                anotherTry = player.fireRandomCell();
-            }
+            anotherTry = player.fireRandomCell();
             
             if(player.isDefeated()){
                 System.out.println("Game Over. " + player.getName() + " is defeated");

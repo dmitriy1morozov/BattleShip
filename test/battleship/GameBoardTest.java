@@ -7,9 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.hamcrest.Matchers.isOneOf;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 
 public class GameBoardTest {
@@ -48,23 +49,6 @@ public class GameBoardTest {
         }
     }
 
-//    /**
-//     * Test of getCell method, of class GameBoard.
-//     */
-//    @Test
-//    public void testGetCell() {
-//        System.out.println("getCell");
-//        int x = ThreadLocalRandom.current().nextInt(0, GameBoard.COLUMNS_NUMBER);
-//        int y = ThreadLocalRandom.current().nextInt(0, GameBoard.ROWS_NUMBER);
-//        
-//        GameBoard instance = new GameBoard();
-//        int expResult = Cell.NOT_CHECKED;
-//        int result = instance.getCell(x, y).getFlag();
-//        assertEquals(expResult, result);
-//        int result2 = instance.getCell(new Coordinates(x, y)).getFlag();
-//        assertEquals(expResult, result2);
-//    }
-
     /**
      * Test of areCoordinatesWithinBoard method, of class GameBoard.
      */
@@ -91,13 +75,13 @@ public class GameBoardTest {
         int x = ThreadLocalRandom.current().nextInt(0, GameBoard.COLUMNS_NUMBER);
         int y = ThreadLocalRandom.current().nextInt(0, GameBoard.ROWS_NUMBER);
         Coordinates coordinates = new Coordinates(x, y);
-        instance.adjoinCell(coordinates);
+        instance.markAdjoinCells(coordinates);
         
         for (int j = -1; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
                 if(i == 0 && j == 0) break;
                 if(x+i < 0 || x+i >= GameBoard.COLUMNS_NUMBER || y+j < 0 || y+j >= GameBoard.ROWS_NUMBER) break;
-                assertTrue(instance.isCellMissed(x+i, y+j) || instance.isCellInjuredDeck(x+i, y+j));
+                assertTrue(instance.getCell(x+i, y+j).isShot());
             }
         }
     }
@@ -111,11 +95,14 @@ public class GameBoardTest {
         GameBoard instance = new GameBoard();
         GameBoard spyInstance = spy(instance);
         
-        //SideEffect
+        //Generate random missed cells on board
+        Cell mockCellMissed = mock(Cell.class);
+        when(mockCellMissed.isShot()).thenReturn(true);
+        when(mockCellMissed.isShip()).thenReturn(false);
         for (int i = 0; i < 10; i++) {
             int x = ThreadLocalRandom.current().nextInt(0, GameBoard.COLUMNS_NUMBER);
             int y = ThreadLocalRandom.current().nextInt(0, GameBoard.ROWS_NUMBER);
-            when(spyInstance.isCellMissed(x, y)).thenReturn(true);
+            when(spyInstance.getCell(x, y)).thenReturn(mockCellMissed);
         }
         spyInstance.refreshFreeCellList();
         LinkedList<Coordinates> sideEffect = spyInstance.getFreeCellList();
@@ -124,7 +111,7 @@ public class GameBoardTest {
         LinkedList<Coordinates> expSideEffect = new LinkedList();
         for (int j = 0; j < GameBoard.ROWS_NUMBER; j++) {
             for (int i = 0; i < GameBoard.COLUMNS_NUMBER; i++) {
-                if(!spyInstance.isCellInjuredDeck(i, j) && !spyInstance.isCellMissed(i, j)){
+                if(!spyInstance.getCell(i, j).isShot()){
                     expSideEffect.add(new Coordinates(i,j));
                 }
             }
@@ -167,7 +154,6 @@ public class GameBoardTest {
                 firstCell.getX() + decksNumber*dx > GameBoard.COLUMNS_NUMBER || 
                 firstCell.getY() + decksNumber*dy > GameBoard.ROWS_NUMBER){
             expResult = null;
-            
         } else{
             for (int i = 0; i < decksNumber; i++) {
                 int x = firstCell.getX() + i*dx;
@@ -203,31 +189,23 @@ public class GameBoardTest {
     }
     
     //==============================================Ai tests========================================
-//    /**
-//     * Test of getAi method, of class GameBoard.
-//     */
-//    @Test
-//    public void testGetAi() {
-//        System.out.println("getAi");
-//        GameBoard instance = new GameBoard();
-//        GameBoard.Ai expResult = null;
-//        GameBoard.Ai result = instance.getAi();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-    
+
     @Test
     public void testGenerateRandomShip() {
         System.out.println("generateRandomShip");
         GameBoard instance = new GameBoard();
         GameBoard spyInstance = spy(instance);
         
-        for (int i = 0; i < 40; i++) {
+        //Generate random missed cells on board
+        Cell mockCellMissed = mock(Cell.class);
+        when(mockCellMissed.isShot()).thenReturn(true);
+        when(mockCellMissed.isShip()).thenReturn(false);
+        for (int i = 0; i < 10; i++) {
             int x = ThreadLocalRandom.current().nextInt(0, GameBoard.COLUMNS_NUMBER);
             int y = ThreadLocalRandom.current().nextInt(0, GameBoard.ROWS_NUMBER);
-            when(spyInstance.isCellMissed(x, y)).thenReturn(true);
+            when(spyInstance.getCell(x, y)).thenReturn(mockCellMissed);
         }
+        
         //TODO I don't like this since it invokes another method from the class to be used. The current method we are testing is not isolated.
         spyInstance.refreshFreeCellList();
 
@@ -235,8 +213,6 @@ public class GameBoardTest {
         Ship generatedShip = spyInstance.getAi().generateRandomShip(decksNumber);
         Coordinates[] shipCoordinates = generatedShip.getCoordinates();
         
-//        int expResult1 = Cell.MISSED;
-//        int expResult2 = Cell.NOT_CHECKED;
         boolean expResult = false;
         
         //Checking adjoined cells. The adjoined cell coordinates are relative coordinates to the deck we are checking
@@ -258,10 +234,8 @@ public class GameBoardTest {
                 for (int i = -1; i <= 1; i+=delta) {  
                     if(i==0 && j==0)break; //prevent checking the deck cell
                     if(x+i < 0 || x+i >= GameBoard.COLUMNS_NUMBER || y+j < 0 || y+j >= GameBoard.ROWS_NUMBER) break;
-                    boolean result = instance.isDeck(x+i, y+j);
+                    boolean result = instance.getCell(x+i, y+j).isShip();
                     assertEquals(expResult, result);
-//                    int result = instance.getCell(x+i, y+j).getFlag();
-//                    assertThat(result, isOneOf(expResult1, expResult2));
                 }
             }     
         }           
@@ -277,8 +251,6 @@ public class GameBoardTest {
         for (Ship ship:shipList) {
             Coordinates[] shipCoordinates = ship.getCoordinates();
             
-//            int expResult1 = Cell.MISSED;
-//            int expResult2 = Cell.NOT_CHECKED;
             boolean expResult = false;
             //Checking adjoined cells. The adjoined cell coordinates are relative coordinates to the deck we are checking
             //(-1,-1), (1, -1), (1,1), (-1, 1)
@@ -299,10 +271,8 @@ public class GameBoardTest {
                     for (int i = -1; i <= 1; i+=delta) {  
                         if(i==0 && j==0)break; //prevent checking the deck cell
                         if(x+i < 0 || x+i >= GameBoard.COLUMNS_NUMBER || y+j < 0 || y+j >= GameBoard.ROWS_NUMBER) break;
-                        boolean result = instance.isDeck(x+i, y+j);
+                        boolean result = instance.getCell(x+i, y+j).isShip();
                         assertEquals(expResult, result);
-//                        int result = instance.getCell(x+i, y+j).getFlag();
-//                        assertThat(result, isOneOf(expResult1, expResult2));
                     }
                 }     
             }  
@@ -322,7 +292,7 @@ public class GameBoardTest {
         
         //Test that possibleDeck is not yet hit and not yet checked
         Coordinates possibleDeck = instance.getAi().searchPossibleDeck(targetDeck);
-        assertTrue(instance.isCellNotShot(possibleDeck));
+        assertTrue(!instance.getCell(possibleDeck).isShot());
         
         int injuredX = targetDeck.getX();
         int injuredY = targetDeck.getY();
@@ -360,7 +330,7 @@ public class GameBoardTest {
         int stepsBetweenInjuredAndPossible = Math.abs(possibleX-injuredX) + Math.abs(possibleY-injuredY);
         for(int i=0; i<stepsBetweenInjuredAndPossible; i++){
             Coordinates checkDeck = new Coordinates(injuredX+i*dx, injuredY+i*dy);
-            assertTrue(instance.isDeck(checkDeck));
+            assertTrue(instance.getCell(checkDeck).isShip());
         }
     }
     
@@ -370,17 +340,21 @@ public class GameBoardTest {
         GameBoard instance = new GameBoard();
         GameBoard spyInstance = spy(instance);
         
-        for (int i = 0; i < 80; i++) {
+        //Generate random missed cells on board
+        Cell mockCellMissed = mock(Cell.class);
+        when(mockCellMissed.isShot()).thenReturn(true);
+        when(mockCellMissed.isShip()).thenReturn(false);
+        for (int i = 0; i < 10; i++) {
             int x = ThreadLocalRandom.current().nextInt(0, GameBoard.COLUMNS_NUMBER);
             int y = ThreadLocalRandom.current().nextInt(0, GameBoard.ROWS_NUMBER);
-            when(spyInstance.isCellMissed(x, y)).thenReturn(true);
+            when(spyInstance.getCell(x, y)).thenReturn(mockCellMissed);
         }
         //TODO I don't like this since it invokes another method from the class to be used. The current method we are testing is not isolated.
         spyInstance.refreshFreeCellList();
 
         Coordinates resultCoordinates = spyInstance.getAi().getRandomNotFiredCellCoordinates();
-        boolean result = spyInstance.isCellNotShot(resultCoordinates);
-        boolean expResult = true;
+        boolean result = spyInstance.getCell(resultCoordinates).isShot();
+        boolean expResult = false;
         assertEquals(expResult, result);
     }
 }
