@@ -10,7 +10,7 @@ public class Player {
     //===============================Fields=====================================
     private final String mName;
     private final GameBoard mBoard;
-    private ArrayList<Ship> mShipList;
+    private final ArrayList<Ship> mShipList;
     
 //===============================Construct==================================
     public Player(String name) {
@@ -182,7 +182,7 @@ public class Player {
         return mShipList.isEmpty();
     }
     public void printGameBoard(){
-        mBoard.print();
+        System.out.println(mBoard.toString());
     }
      
     /**    

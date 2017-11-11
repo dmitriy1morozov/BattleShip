@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>BattleShip-master</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<variableList>
+		<variable>
+			<name>JDK</name>
+			<value>file:/C:/Users/Dmitriy.Morozov.ECOMUA.000/Desktop/Shortcuts/EclipsePortable/JDK64</value>
+		</variable>
+		<variable>
+			<name>Java</name>
+			<value>file:/C:/Users/Dmitriy.Morozov.ECOMUA.000/Desktop/Shortcuts/EclipsePortable/Java</value>
+		</variable>
+	</variableList>
+</projectDescription>

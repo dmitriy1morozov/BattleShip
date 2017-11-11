@@ -2,13 +2,21 @@ package battleship;
 
 import java.util.LinkedList;
 
+/**
+ * Short description of symbols for command line String output of GameBoard instance
+ * + - NOT SHOT ship's deck. isShot == false, isShip == true
+ * X - SHOT ship's deck. isShot == true, isShip == true
+ * . - NOT SHOT empty cell. isShot == false, isShip == true
+ * o - SHOT empty cell. isShot == true, isShip == true
+ * @author Borsh
+ */
 public class GameBoard {
     //===============================Fields=====================================
     public final static int COLUMNS_NUMBER = 10;
     public final static int ROWS_NUMBER = 10;
     
-    private final Cell[][] mCell;
-    private LinkedList<Coordinates> mFreeCellList;
+    protected final Cell[][] mCell;
+    protected LinkedList<Coordinates> mFreeCellList;
     
     //===============================Construct==================================
     public GameBoard() {
@@ -81,12 +89,14 @@ public class GameBoard {
     }
     
     //--------------------------------------------------------------------------
-    public void print(){
+    @Override
+    public String toString(){
+        StringBuilder gameBoardString = new StringBuilder();
         char[] dictionary = "   ABCDEFGHIJ".toCharArray();
         for(char letter:dictionary){
-            System.out.print(letter);
+            gameBoardString.append(letter);
         }
-        System.out.println("");
+        gameBoardString.append("\n");
         
         for(int j = 0; j < ROWS_NUMBER; j++){
             String rowNumber;
@@ -95,15 +105,17 @@ public class GameBoard {
             } else{
                 rowNumber = (j+1) + " ";
             }
-            System.out.print(rowNumber);
+            gameBoardString.append(rowNumber);
             
             for(int i = 0; i < COLUMNS_NUMBER; i++){
-                if(!getCell(i,j).isShot() && getCell(i,j).isShip()) System.out.print("+");
-                if(!getCell(i,j).isShot() && !getCell(i,j).isShip()) System.out.print(".");
-                if(getCell(i,j).isShot() && getCell(i,j).isShip()) System.out.print("X");
-                if(getCell(i,j).isShot() && !getCell(i,j).isShip()) System.out.print("o");
+                if(!getCell(i,j).isShot() && getCell(i,j).isShip()) gameBoardString.append("+");
+                if(!getCell(i,j).isShot() && !getCell(i,j).isShip()) gameBoardString.append(".");
+                if(getCell(i,j).isShot() && getCell(i,j).isShip()) gameBoardString.append("X");
+                if(getCell(i,j).isShot() && !getCell(i,j).isShip()) gameBoardString.append("o");
             }
-            System.out.println();
+            gameBoardString.append("\n");
         }
+        
+        return gameBoardString.toString();
     }
 }

@@ -19,8 +19,16 @@ public class Coordinates {
         return mY;
     }
     
-    public boolean equals(Coordinates coord){
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Coordinates))return false;
+        Coordinates coord = (Coordinates)obj;
         return(coord.getX() == mX && coord.getY() == mY);
+    }
+    
+    @Override
+    public String toString(){
+        return "[" + mX + "," + mY + "]";
     }
     
     public Coordinates stepRight(int steps){

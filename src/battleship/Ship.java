@@ -49,7 +49,11 @@ public class Ship {
         return false;
     }
 
-    public boolean equals(Ship ship) {
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Ship)) return false;
+        Ship ship = (Ship)obj;
+        
         if(ship.getCoordinates().length != this.getCoordinates().length 
                 || ship.getDeckCells().length != this.getDeckCells().length){
             return false;

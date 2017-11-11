@@ -2,14 +2,13 @@ package battleship;
 
 public class Cell {
     //===============================Fields=====================================
-    private boolean mIsShot;
-    private boolean mIsShip;
+    protected boolean mIsShot;
+    protected boolean mIsShip;
     //===============================Construct==================================
     public Cell() {
         mIsShot = false;
         mIsShip = false;
     }
-
     //===============================Public Methods=============================
     public boolean isShot(){
         return mIsShot;
@@ -44,5 +43,22 @@ public class Cell {
     public void setAdjoined(){
         mIsShot = true;
         mIsShip = false;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Cell)) return false;
+        Cell cell = (Cell)obj;
+        
+        if(cell.isShip() == this.isShip() && cell.isShot() == this.isShot()){
+            return true;
+        } else{
+            return false;
+        }
+    }
+    
+    @Override
+    public String toString(){
+        return "(isShot = " + mIsShot + " ; isShip = " + mIsShip + ")";
     }
 }

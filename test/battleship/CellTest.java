@@ -1,25 +1,11 @@
 package battleship;
 
-import java.lang.reflect.Field;
-import static org.junit.Assert.*;
 import org.junit.*;
+import static org.junit.Assert.*;
 
 public class CellTest {
-    
-    public CellTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
 
-    /**
-     * Test of occupy method, of class Cell.
-     */
+    //------------------------------------Occupy----------------------------------------------------
     @Test
     public void testOccupy() {
         System.out.println("occupy");
@@ -28,22 +14,8 @@ public class CellTest {
         boolean result = instance.isShip() && !instance.isShot();
         assertTrue(result);
     }
-
-    /**
-     * Test of clear method, of class Cell.
-     */
-    @Test
-    public void testClear() {
-        System.out.println("clear");
-        Cell instance = new Cell();
-        instance.clear();
-        boolean result = !instance.isShot() && !instance.isShip();
-        assertTrue(result);
-    }
     
-    /**
-     * Test of setAdjoined method, of class Cell.
-     */
+    //----------------------------------SetAdjoined-------------------------------------------------
     @Test
     public void testSetAdjoined() {
         System.out.println("setAdjoined");
@@ -53,19 +25,45 @@ public class CellTest {
         assertTrue(result);
     }
 
+    //-----------------------------------Clear------------------------------------------------------
     @Test
-    public void testFire_Missed() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        System.out.println("fireFreeCell");
-        Cell instance = new Cell();
-        
-        //TODO DON"T USE THAT! CAUTION!! REFLECTION DETECTED!
-        //Reflection to edit fields
-        Field field1 = instance.getClass().getDeclaredField("mIsShip");
-        field1.setAccessible(true);
-        field1.set(instance, false);
-        Field field2 = instance.getClass().getDeclaredField("mIsShot");
-        field2.setAccessible(true);
-        field2.set(instance, false);
+    public void testClear_EmptyCell() {
+        System.out.println("clear_EmptyCell");
+        Cell instance = new CellSpy(false, false);
+        instance.clear();
+        boolean result = !instance.isShot() && !instance.isShip();
+        assertTrue(result);
+    }
+    @Test
+    public void testClear_HitDeck() {
+        System.out.println("clear_HitDeck");
+        Cell instance = new CellSpy(true, true);
+        instance.clear();
+        boolean result = !instance.isShot() && !instance.isShip();
+        assertTrue(result);
+    }
+    @Test
+    public void testClear_MissedCell() {
+        System.out.println("clear_MissedCell");
+        Cell instance = new CellSpy(true, false);
+        instance.clear();
+        boolean result = !instance.isShot() && !instance.isShip();
+        assertTrue(result);
+    }
+    @Test
+    public void testClear_HiddenShip() {
+        System.out.println("clear_HiddenShip");
+        Cell instance = new CellSpy(false, true);
+        instance.clear();
+        boolean result = !instance.isShot() && !instance.isShip();
+        assertTrue(result);
+    }
+    
+    //---------------------------------------Fire---------------------------------------------------
+    @Test
+    public void testFire_EmptyCell(){
+        System.out.println("fire_EmptyCell");
+        Cell instance = new CellSpy(false, false);
         
         //No additional move for missing a cell
         assertFalse(instance.fire());
@@ -74,18 +72,9 @@ public class CellTest {
     }
     
     @Test
-    public void testFire_Hit() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        System.out.println("fireFreeCell");
-        Cell instance = new Cell();
-        
-        //TODO DON"T USE THAT! CAUTION!! REFLECTION DETECTED!
-        //Reflection to edit fields
-        Field field1 = instance.getClass().getDeclaredField("mIsShip");
-        field1.setAccessible(true);
-        field1.set(instance, true);
-        Field field2 = instance.getClass().getDeclaredField("mIsShot");
-        field2.setAccessible(true);
-        field2.set(instance, false);
+    public void testFire_HitDeck(){
+        System.out.println("fire_AlreadyHitDeck");
+        Cell instance = new CellSpy(true, true);
 
         //Bonus move for hitting a ship
         assertTrue(instance.fire());
@@ -94,18 +83,9 @@ public class CellTest {
     }
     
     @Test
-    public void testFire_ShotAlreadyMissedCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        System.out.println("fireFreeCell");
-        Cell instance = new Cell();
-        
-        //TODO DON"T USE THAT! CAUTION!! REFLECTION DETECTED!
-        //Reflection to edit fields
-        Field field1 = instance.getClass().getDeclaredField("mIsShip");
-        field1.setAccessible(true);
-        field1.set(instance, false);
-        Field field2 = instance.getClass().getDeclaredField("mIsShot");
-        field2.setAccessible(true);
-        field2.set(instance, true);
+    public void testFire_MissedCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        System.out.println("fire_AlreadyMissedCell");
+        Cell instance = new CellSpy(true, false);
         
         assertTrue(instance.fire());
         assertTrue(instance.isShot());
@@ -113,18 +93,9 @@ public class CellTest {
     }
     
     @Test
-    public void testFire_ShotAlreadyHitCell() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        System.out.println("fireFreeCell");
-        Cell instance = new Cell();
-        
-        //TODO DON"T USE THAT! CAUTION!! REFLECTION DETECTED!
-        //Reflection to edit fields
-        Field field1 = instance.getClass().getDeclaredField("mIsShip");
-        field1.setAccessible(true);
-        field1.set(instance, true);
-        Field field2 = instance.getClass().getDeclaredField("mIsShot");
-        field2.setAccessible(true);
-        field2.set(instance, true);
+    public void testFire_FoundDeck(){
+        System.out.println("fire_FoundDeck");
+        Cell instance = new CellSpy(false, true);
         
         assertTrue(instance.fire());
         assertTrue(instance.isShot());
